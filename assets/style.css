@@ -1,3 +1,7 @@
+* {
+    transition: all 0.5s;
+}
+
 body {
     margin: 0;
     padding: 0;
@@ -5,4 +9,13 @@ body {
 
 #map-container {
     height: 100dvh;
+}
+
+#map {
+    height: 100%;
+}
+
+#location-btn {
+    height: 7%;
+    aspect-ratio: 1;
 }
