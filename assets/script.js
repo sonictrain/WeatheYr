@@ -8,19 +8,59 @@ let map = new mapboxgl.Map({
 let pointer = new mapboxgl.Marker()
 
 function locateMe() {
+    handleSpinner();
     navigator.geolocation.getCurrentPosition(success)
 };
 
 
 function success(geoCoord) {
-    map = new mapboxgl.Map({
-        container: 'map',
+    map.flyTo({
         center: [geoCoord.coords.longitude, geoCoord.coords.latitude],
-        zoom: 9
-    })
+        zoom: 9,
+        essential: true
+        });
     pointer = new mapboxgl.Marker()
         .setLngLat([geoCoord.coords.longitude, geoCoord.coords.latitude])
         .addTo(map);
+
+    handleSpinner();
 };
 
 $('#location-btn').on('click', locateMe);
+
+function handleSpinner() {
+    if ($('#spinner').attr('status') === 'idle') {
+
+        $('#location-icon').addClass('opacity-0')
+
+        setTimeout(function(){
+            $('#location-icon').addClass('d-none');
+            $('#spinner').removeClass('d-none');
+        },500)
+
+        $('#spinner').removeClass('opacity-0');
+
+        setTimeout(function(){
+            $('#spinner').addClass('opacity-100');
+        },500)
+
+        $('#spinner').attr('status', 'active')
+
+    } else if ($('#spinner').attr('status') === 'active') {
+
+        $('#spinner').removeClass('opacity-100');
+        $('#spinner').addClass('opacity-0')
+
+        setTimeout(function(){
+            $('#spinner').addClass('d-none');
+            $('#location-icon').removeClass('d-none');
+            $('#spinner').attr('status', 'idle')
+        },500)
+
+        $('#location-icon').removeClass('opacity-0');
+
+        setTimeout(function(){
+            $('#location-icon').addClass('opacity-100');
+        },500)
+    };
+};
