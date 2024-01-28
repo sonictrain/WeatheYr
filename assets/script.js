@@ -19,9 +19,21 @@ function success(geoCoord) {
         zoom: 9,
         essential: true
         });
+    if (pointer) {
+        pointer.remove();
+    }
     pointer = new mapboxgl.Marker()
         .setLngLat([geoCoord.coords.longitude, geoCoord.coords.latitude])
-        .addTo(map);
+        .setDraggable(true)
+        .addTo(map)
+        .on('dragend', () => {
+            const LngLat = pointer.getLngLat()
+            map.flyTo({
+                center: [LngLat.lng, LngLat.lat],
+                zoom: 9,
+                essential: true
+                });
+        });
 
     handleSpinner();
 };
